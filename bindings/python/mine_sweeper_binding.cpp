@@ -3,6 +3,8 @@
 #include "mine_sweeper_solver.hpp"
 #include "mine_sweeper_solver_functions.hpp"
 
+#include <string>
+
 namespace py = pybind11;
 
 PYBIND11_MODULE(MineSweeper, m)
@@ -44,12 +46,20 @@ PYBIND11_MODULE(MineSweeper, m)
         .value("IN_PROGRESS", mswp::MineSweeper::GameState::IN_PROGRESS)
         .value("LOST", mswp::MineSweeper::GameState::LOST)
         .value("WON", mswp::MineSweeper::GameState::WON);
-
+    
+    py::class_<slvr::Tile>(m, "Tile")
+        .def(py::init<>())
+        .def("hidden", &slvr::Tile::hidden)
+        .def("is_bomb", &slvr::Tile::isBomb)
+        .def_readwrite("adj_bombs", &slvr::Tile::adjBombs)
+        .def_readwrite("adj_unknowns", &slvr::Tile::adjUnknowns);
     py::class_<slvr::MineSweeperSolver>(m, "MineSweeperSolver")
         .def(py::init<mswp::MineSweeper>())
         .def("update", &slvr::MineSweeperSolver::update)
         .def("width", &slvr::MineSweeperSolver::width)
-        .def("size", &slvr::MineSweeperSolver::size);
+        .def("size", &slvr::MineSweeperSolver::size)
+        .def("deep_tiles_remaining", static_cast<mswp::BoardSize (slvr::MineSweeperSolver::*)() const>(&slvr::MineSweeperSolver::remainingDeepTiles))
+        .def("tiles", static_cast<const slvr::Tiles& (slvr::MineSweeperSolver::*)() const>(&slvr::MineSweeperSolver::tiles));
     
     py::class_<slvr::ActionArray>(m, "ActionArray")
         .def(py::init<>())
@@ -61,4 +71,6 @@ PYBIND11_MODULE(MineSweeper, m)
     m.def("intersection_solve", slvr::intersectionSolver);
 
     m.def("recommended_actions", slvr::getRecommendedActions);
+
+    m.def("get_reward", slvr::getReward);
 }

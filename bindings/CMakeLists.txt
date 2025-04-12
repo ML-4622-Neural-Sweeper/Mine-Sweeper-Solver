@@ -6,7 +6,8 @@ FetchContent_Declare(pybind11
 FetchContent_MakeAvailable(
     pybind11)
 
-find_package(Python3 REQUIRED COMPONENTS Development)
+find_package(Python3 3.8 REQUIRED COMPONENTS Development)
+message("Python version: ${Python3_VERSION}")
 
 pybind11_add_module(MineSweeper python/mine_sweeper_binding.cpp)
 target_link_libraries(MineSweeper PRIVATE Python3::Python pybind11::module mine_sweeper mine_sweeper_solver)
@@ -17,8 +18,8 @@ set_target_properties(MineSweeper PROPERTIES
     SUFFIX ".so"  # Set the file extension to .so instead of .cpython-xyz.so
 )
 
-add_custom_target(MineSweeperCopyPython ALL
+add_custom_target(MineSweeperCopyBinary ALL
 	COMMAND ${CMAKE_COMMAND} -E copy
-    ${CMAKE_CURRENT_SOURCE_DIR}/test.py
-    ${CMAKE_CURRENT_BINARY_DIR}/test.py
+    ${CMAKE_CURRENT_BINARY_DIR}/MineSweeper.so
+    ${CMAKE_SOURCE_DIR}/neural_sweeper/src/MineSweeper.so
 ) 

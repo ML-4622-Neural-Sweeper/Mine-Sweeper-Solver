@@ -1,0 +1,27 @@
+[build-system]
+build-backend = "setuptools.build_meta"
+requires = ["setuptools>=61.0"]
+
+[project]
+name = "neural_sweeper"
+version = "0.0.1"
+requires-python = "<=3.13.3,>=3.8"
+authors = [
+    { name="Dalton Prokosch", email="daltonprokosch@gmail.com" }
+]
+dependencies = [
+    "numpy"
+]
+
+[tool.setuptools.package-data]
+"mine_sweeper_env" = ["mine_sweeper_env/mine_sweeper_env.py"]
+
+[project.scripts]
+ssay = "neural_sweeper.__main__:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["*.so"]

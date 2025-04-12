@@ -117,4 +117,20 @@ void intersectionSolver(MineSweeperSolver& outSolver, ActionArray& outClicks, Ac
 
 void getRecommendedActions(MineSweeperSolver& outSolver, ActionArray& outClicks, ActionArray& outFlags);
 
+/**
+ * @brief Get reward for tiles clicked, used by python in conjunction with ML packages.
+ * 
+ * @param x x position clicked
+ * @param y y position clicked
+ * @param rewardPerTileClicked amount multiplied by tiles clicked
+ * @param rewardForWinning amount gained when game is won
+ * @param rewardForLosing amount gained when game is lost
+ * @param outBoard board
+ * @param outSolver solver
+ * @return float 
+ */
+float getReward(
+    mswp::BoardXPos x, mswp::BoardYPos y, float rewardPerTileClicked, float rewardForWinning, 
+    float rewardForLosing, mswp::MineSweeper& outBoard, MineSweeperSolver& outSolver);
+
 }

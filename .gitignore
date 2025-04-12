@@ -2,4 +2,6 @@
 *.vscode*
 *results*
 
-*TerminalSweeper.egg-info*
+*neural_sweeper.egg-info*
+
+MineSweeper.so*

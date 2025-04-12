@@ -29,6 +29,10 @@ struct Tile
     {
         return bombProb != bombProb;
     }
+    bool isBomb() const
+    {
+        return bombProb == 1;
+    }
     float bombProb;
     int8_t adjBombs;
     int8_t adjUnknowns;

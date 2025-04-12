@@ -255,7 +255,7 @@ void calculateProbs(MineSweeperSolver& outSolver, TileProbs& outProbs)
         }
     }
 
-    double deepTileProb = remainingProb /= outSolver.remainingDeepTiles();
+    double deepTileProb = remainingProb / outSolver.remainingDeepTiles();
 
     for (mswp::BoardIndex i = 0; i < size; i++)
     {
