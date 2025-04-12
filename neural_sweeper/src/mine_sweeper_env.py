@@ -1,4 +1,5 @@
 import MineSweeper as ms
+import numpy as np
 
 # Constants
 WIDTH = 30
