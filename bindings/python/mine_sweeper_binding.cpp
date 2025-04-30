@@ -72,5 +72,11 @@ PYBIND11_MODULE(MineSweeper, m)
 
     m.def("recommended_actions", slvr::getRecommendedActions);
 
-    m.def("get_reward", slvr::getReward);
+    m.def("get_reward",
+        [](int16_t index, float r1, float r2, float r3, float r4, float r5,
+           mswp::MineSweeper& board, slvr::MineSweeperSolver& solver) 
+        {
+            return slvr::getReward(static_cast<mswp::BoardIndex>(index), r1, r2, r3, r4, r5, board, solver);
+        }
+    );
 }
