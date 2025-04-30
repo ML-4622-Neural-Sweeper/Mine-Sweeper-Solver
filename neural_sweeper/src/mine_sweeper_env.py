@@ -1,10 +1,7 @@
 import MineSweeper as ms
-import numpy as np
+from hyperparameters import *
 
-# Constants
-WIDTH = 30
-HEIGHT = 16
-BOMB_COUNT = 99
+import numpy as np
 
 class MineSweeperEnv:
     """
@@ -12,7 +9,8 @@ class MineSweeperEnv:
         comes up against non deterministic board configuration.
     """
     def __init__(
-        self, reward_per_tile_clicked: float, reward_for_winning: float, reward_for_losing: float
+        self, reward_per_tile_clicked: float, reward_for_winning: float, reward_for_losing: float, 
+        reward_for_clicking_visible_tile: float, reward_for_clicking_flagged_tile: float
     ):
         """
             Creates MineSweeperEnv object used for reinforcement learning.
@@ -23,19 +21,28 @@ class MineSweeperEnv:
                     Amount of reward when game won.
                 reward_for_losing:
                     Amount of reward when game lost.
+                reward_for_clicking_visible_tile:
+                    Amount of reward gained when visible tile is clicked.
+                reward_for_clicking_flagged_tile:
+                    Amount of reward gained when flagged tile is clicked.
         """
-        global WIDTH, HEIGHT, BOMB_COUNT
+        global BOARD_WIDTH, BOARD_HEIGHT, BOMB_COUNT
 
         # Init Board
-        self.board = ms.MineSweeper(WIDTH, HEIGHT, BOMB_COUNT)
+        print('board')
+        self.board = ms.MineSweeper(BOARD_WIDTH, BOARD_HEIGHT, BOMB_COUNT)
+        print('solver')
         self.solver = ms.MineSweeperSolver(self.board)
+        print('rewards')
 
         # Init rewards
         self.reward_per_tile_clicked = reward_per_tile_clicked
         self.reward_for_winning = reward_for_winning
         self.reward_for_losing = reward_for_losing
+        self.reward_for_clicking_visible_tile = reward_for_clicking_visible_tile
+        self.reward_for_clicking_flagged_tile = reward_for_clicking_flagged_tile
 
-    def take_action(self, index: int) -> tuple[float, bool]:
+    def step(self, index: int) -> tuple[float, bool]:
         """
             Preforms action on enviroment.
             Args:
@@ -46,18 +53,26 @@ class MineSweeperEnv:
         """
         reward = ms.get_reward(
             index, self.reward_per_tile_clicked, self.reward_for_winning, 
-            self.reward_for_losing, self.board, self.solver
+            self.reward_for_losing, self.reward_for_clicking_visible_tile,
+            self.reward_for_clicking_flagged_tile, self.board, self.solver
         )
         is_game_over = ms.board.game_state() == ms.GameState.WON or ms.board.game_state() == ms.GameState.LOST
-        return (reward, is_game_over) 
+        return (reward, is_game_over)
+    
+    def reset(self):
+        global BOARD_WIDTH, BOARD_HEIGHT, BOMB_COUNT
 
-    def get_board_data(self) -> np.ndarray:
+        # Reset Boards
+        self.board = ms.MineSweeper(BOARD_WIDTH, BOARD_HEIGHT, BOMB_COUNT)
+        self.solver = ms.MineSweeperSolver(self.board)
+
+    def get_state(self) -> np.ndarray:
         """
             Gets data used by RL model.
             Returns:
                 Float Matrix containing RL data.
         """
-        global WIDTH, HEIGHT, BOMB_COUNT
+        global BOARD_WIDTH, BOARD_HEIGHT, BOMB_COUNT
 
         IS_BOMB_INDEX    = 0
         ADJ_BOMBS_INDEX  = 1
@@ -65,7 +80,7 @@ class MineSweeperEnv:
         STATE_INDEX      = 3
 
         # 4 x WIDTH*HEIGHT matrix containing info about baord.
-        board_state = np.zeros((4,WIDTH*HEIGHT), dtype=float)
+        board_state = np.zeros((4,BOARD_WIDTH*BOARD_HEIGHT), dtype=float)
 
         for tile in self.solver.tiles():
             # 1.0 for bomb, 0.0 for not a bomb
@@ -80,6 +95,6 @@ class MineSweeperEnv:
         # [0, MAX_TILE_COUNT] in N, amount of tiles left that do not board a visible one.
         board_state[STATE_INDEX][1] = float(self.solver.deep_tiles_remaining())
         # WIDTH Constant
-        board_state[STATE_INDEX][2] = float(WIDTH)
+        board_state[STATE_INDEX][2] = float(BOARD_WIDTH)
         # HEIGHT Constant
-        board_state[STATE_INDEX][3] = float(HEIGHT)
+        board_state[STATE_INDEX][3] = float(BOARD_HEIGHT)
