@@ -130,7 +130,8 @@ void getRecommendedActions(MineSweeperSolver& outSolver, ActionArray& outClicks,
  * @return float 
  */
 float getReward(
-    mswp::BoardXPos x, mswp::BoardYPos y, float rewardPerTileClicked, float rewardForWinning, 
-    float rewardForLosing, mswp::MineSweeper& outBoard, MineSweeperSolver& outSolver);
+    mswp::BoardIndex i, float rewardPerTileClicked, float rewardForWinning, 
+    float rewardForLosing, float rewardForClickingVisTile, float rewardForClickingFlag, 
+    mswp::MineSweeper& outBoard, MineSweeperSolver& outSolver);
 
 }

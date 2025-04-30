@@ -286,7 +286,8 @@ void getRecommendedActions(MineSweeperSolver& outSolver, ActionArray& outClicks,
 
 float getReward(
     mswp::BoardIndex i, float rewardPerTileClicked, float rewardForWinning, 
-    float rewardForLosing, mswp::MineSweeper& outBoard, MineSweeperSolver& outSolver)
+    float rewardForLosing, float rewardForClickingVisTile, float rewardForClickingFlag, 
+    mswp::MineSweeper& outBoard, MineSweeperSolver& outSolver)
 {
     ActionArray clicks;
     ActionArray flags;
@@ -294,6 +295,15 @@ float getReward(
     mswp::BoardSize totalTilesClicked = 0;
 
     outBoard.click(i);
+
+    if (outBoard[i].state == mswp::Tile::VISIBLE)
+    {
+        return rewardForClickingVisTile;
+    }
+    if (outBoard[i].state == mswp::Tile::FLAGGED)
+    {
+        return rewardForClickingFlag;
+    }
     
     while (true)
     {
