@@ -1,0 +1,22 @@
+# Reward Params
+REWARD_PER_TILE_CLICKED          = 0.0
+REWARD_FOR_WINNING               = 0.0
+REWARD_FOR_LOSING                = 0.0
+REWARD_FOR_CLICKING_VISIBLE_TILE = 0.0
+REWARD_FOR_CLICKING_FLAGGED_TILE = 0.0
+
+# Mine Sweeper Env Params
+BOARD_WIDTH   = 8
+BOARD_HEIGHT  = 8
+NUM_ACTIONS   = BOARD_WIDTH * BOARD_HEIGHT
+BOMB_COUNT    = 99
+
+# Agent Params
+GAMMA         = 0.99
+BATCH_SIZE    = 64
+EPSILON_DECAY = 0.995
+MIN_EPSILON   = 0.1
+LR            = 1e-3
+
+# Replay Buffer Params
+MEMORY_SIZE   = 10000
