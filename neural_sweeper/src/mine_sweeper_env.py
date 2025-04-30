@@ -56,7 +56,7 @@ class MineSweeperEnv:
             self.reward_for_losing, self.reward_for_clicking_visible_tile,
             self.reward_for_clicking_flagged_tile, self.board, self.solver
         )
-        is_game_over = ms.board.game_state() == ms.GameState.WON or ms.board.game_state() == ms.GameState.LOST
+        is_game_over = self.board.game_state() == ms.GameState.WON or self.board.game_state() == ms.GameState.LOST
         return (reward, is_game_over)
     
     def reset(self):

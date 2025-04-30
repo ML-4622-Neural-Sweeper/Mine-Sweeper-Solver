@@ -1,4 +1,5 @@
 #include "pybind11/pybind11.h"
+#include "pybind11/stl.h"
 #include "mine_sweeper.hpp"
 #include "mine_sweeper_solver.hpp"
 #include "mine_sweeper_solver_functions.hpp"
@@ -52,7 +53,13 @@ PYBIND11_MODULE(MineSweeper, m)
         .def("hidden", &slvr::Tile::hidden)
         .def("is_bomb", &slvr::Tile::isBomb)
         .def_readwrite("adj_bombs", &slvr::Tile::adjBombs)
-        .def_readwrite("adj_unknowns", &slvr::Tile::adjUnknowns);
+        .def_readwrite("adj_hidden", &slvr::Tile::adjUnknowns);
+
+    py::class_<slvr::Tiles>(m, "Tiles")
+        .def("__getitem__", [](slvr::Tiles &self, size_t index) {
+            return self[index];  // Calls operator[]
+        });
+
     py::class_<slvr::MineSweeperSolver>(m, "MineSweeperSolver")
         .def(py::init<mswp::MineSweeper>())
         .def("update", &slvr::MineSweeperSolver::update)
