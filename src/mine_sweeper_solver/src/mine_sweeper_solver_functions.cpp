@@ -294,8 +294,6 @@ float getReward(
 
     mswp::BoardSize totalTilesClicked = 0;
 
-    outBoard.click(i);
-
     if (outBoard[i].state == mswp::Tile::VISIBLE)
     {
         return rewardForClickingVisTile;
@@ -304,11 +302,12 @@ float getReward(
     {
         return rewardForClickingFlag;
     }
+
+    outBoard.click(i);
+    outSolver.update(outBoard.tileString());
     
     while (true)
     {
-        outSolver.update(outBoard.tileString());
-
         intersectionSolver(outSolver, clicks, flags);
     
         if (outBoard.gameState() == mswp::MineSweeper::WON)
@@ -328,6 +327,7 @@ float getReward(
 
         mswp::BoardSize tiles_pre_click = outBoard.remainingTile();
         useActionArrays(clicks, flags, outBoard);
+        outSolver.update(outBoard.tileString());
         totalTilesClicked += tiles_pre_click - outBoard.remainingTile();
     }
 }

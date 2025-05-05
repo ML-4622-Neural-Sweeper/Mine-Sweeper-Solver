@@ -8,6 +8,8 @@
 
 namespace py = pybind11;
 
+PYBIND11_MAKE_OPAQUE(mswp::BoardIndex);
+
 PYBIND11_MODULE(MineSweeper, m)
 {
     py::class_<mswp::TileString>(m, "TileString")
@@ -16,12 +18,12 @@ PYBIND11_MODULE(MineSweeper, m)
         .def(py::init(
         [](mswp::BoardWidth width, mswp::BoardHeight height, mswp::BombCount bombCount, mswp::BoardSeed seed) 
         {
-            return std::unique_ptr<mswp::MineSweeper>(new mswp::MineSweeper(width, height, bombCount, seed));
+            return mswp::MineSweeper(width, height, bombCount, seed);
         }))
         .def(py::init(
         [](mswp::BoardWidth width, mswp::BoardHeight height, mswp::BombCount bombCount) 
         {
-            return std::unique_ptr<mswp::MineSweeper>(new mswp::MineSweeper(width, height, bombCount, time(0)));
+            return mswp::MineSweeper(width, height, bombCount, time(0));
         }))
         .def("click", static_cast<bool (mswp::MineSweeper::*)(mswp::BoardIndex)>(&mswp::MineSweeper::click))
         .def("click", static_cast<bool (mswp::MineSweeper::*)(mswp::BoardXPos, mswp::BoardYPos)>(&mswp::MineSweeper::click))
@@ -65,8 +67,17 @@ PYBIND11_MODULE(MineSweeper, m)
         .def("update", &slvr::MineSweeperSolver::update)
         .def("width", &slvr::MineSweeperSolver::width)
         .def("size", &slvr::MineSweeperSolver::size)
-        .def("deep_tiles_remaining", static_cast<mswp::BoardSize (slvr::MineSweeperSolver::*)() const>(&slvr::MineSweeperSolver::remainingDeepTiles))
-        .def("tiles", static_cast<const slvr::Tiles& (slvr::MineSweeperSolver::*)() const>(&slvr::MineSweeperSolver::tiles));
+        .def("deep_tiles_remaining", [](slvr::MineSweeperSolver& solver) {
+            return static_cast<int>(solver.remainingDeepTiles());
+        })
+        .def("tiles", static_cast<const slvr::Tiles& (slvr::MineSweeperSolver::*)() const>(&slvr::MineSweeperSolver::tiles))
+        .def("__repr__", [](const slvr::MineSweeperSolver& solver) 
+        {
+            std::ostringstream stream;
+            stream << solver;
+            std::string str = stream.str();
+            return str;
+        });
     
     py::class_<slvr::ActionArray>(m, "ActionArray")
         .def(py::init<>())
@@ -79,11 +90,8 @@ PYBIND11_MODULE(MineSweeper, m)
 
     m.def("recommended_actions", slvr::getRecommendedActions);
 
-    m.def("get_reward",
-        [](int16_t index, float r1, float r2, float r3, float r4, float r5,
-           mswp::MineSweeper& board, slvr::MineSweeperSolver& solver) 
-        {
-            return slvr::getReward(static_cast<mswp::BoardIndex>(index), r1, r2, r3, r4, r5, board, solver);
-        }
-    );
+    m.def("get_reward", [](int index, float r0, float r1, float r2, float r3, float r4, mswp::MineSweeper& board, slvr::MineSweeperSolver& solver) 
+    {
+        return slvr::getReward(index, r0, r1, r2, r3, r4, board, solver);
+    });
 }

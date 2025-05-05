@@ -15,13 +15,16 @@ class DQNAgent:
         self.replay_buffer = ReplayBuffer()
         self.epsilon = 1.0
 
-    def act(self, state):
+    def act(self, state, action_mask):
         if random.random() < self.epsilon:
-            return random.randint(0, NUM_ACTIONS - 1)
-        state_tensor = torch.FloatTensor(state).unsqueeze(0).unsqueeze(0)
+            valid_indices = torch.nonzero(action_mask, as_tuple=True)[0]
+            return random.choice(valid_indices.tolist())
+        state_tensor = state.unsqueeze(0).unsqueeze(0)
         with torch.no_grad():
-            q_values = self.model(state_tensor)
-        return q_values.argmax().item()
+            q_values = self.model(state_tensor)[0]
+        masked_q_values = q_values.clone()
+        masked_q_values[~action_mask] = float('-inf')
+        return masked_q_values.argmax().item()
 
     def train_step(self):
         if len(self.replay_buffer) < BATCH_SIZE:

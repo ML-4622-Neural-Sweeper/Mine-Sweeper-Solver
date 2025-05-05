@@ -16,7 +16,7 @@ class MinesweeperDQN(nn.Module):
         # Neural Deep Q 
         self.fully_connected = nn.Sequential(
             nn.Flatten(),
-            nn.Linear(64 * NUM_ACTIONS, 512),
+            nn.Linear(4 * 64 * NUM_ACTIONS, 512),
             nn.ReLU(),
             nn.Linear(512, NUM_ACTIONS)
         )
