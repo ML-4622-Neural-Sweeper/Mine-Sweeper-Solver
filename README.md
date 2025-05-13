@@ -35,7 +35,7 @@ First, modify the hyperparameters located in `neural_sweeper/src/hyperparameters
 ```
 
 ## File Structure
-
+```bash
 Neural-Sweeper/
 ├── benchmark/      # Benchmarks for MineSweeper and utilities
 ├── bindings/       # C++ to Python bindings
@@ -45,7 +45,7 @@ Neural-Sweeper/
 ├── docs/           # Documentation assets
 ├── CMakeLists.txt
 └── README.md
-
+```
 ## Packages Used
 - [Google Benchmark](https://github.com/google/benchmark)
 - [Google Test](https://github.com/google/googletest)
