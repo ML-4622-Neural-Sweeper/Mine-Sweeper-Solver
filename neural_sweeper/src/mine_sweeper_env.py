@@ -61,11 +61,13 @@ class MineSweeperEnv:
             Returns:
                 Tuple containing reward of action, and whether or not the game is over.
         """
+        print('get reward!')
         reward = ms.get_reward(
             index, self.reward_per_tile_clicked, self.reward_for_winning, 
             self.reward_for_losing, self.reward_for_clicking_visible_tile,
             self.reward_for_clicking_flagged_tile, self.board, self.solver
         )
+        print('got reward!')
         is_game_over = self.board.game_state() == ms.GameState.WON or self.board.game_state() == ms.GameState.LOST
         return (reward, is_game_over)
     

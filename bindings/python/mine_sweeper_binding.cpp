@@ -67,7 +67,8 @@ PYBIND11_MODULE(MineSweeper, m)
         .def("update", &slvr::MineSweeperSolver::update)
         .def("width", &slvr::MineSweeperSolver::width)
         .def("size", &slvr::MineSweeperSolver::size)
-        .def("deep_tiles_remaining", [](slvr::MineSweeperSolver& solver) {
+        .def("deep_tiles_remaining", [](slvr::MineSweeperSolver& solver) 
+        {
             return static_cast<int>(solver.remainingDeepTiles());
         })
         .def("tiles", static_cast<const slvr::Tiles& (slvr::MineSweeperSolver::*)() const>(&slvr::MineSweeperSolver::tiles))
@@ -82,6 +83,10 @@ PYBIND11_MODULE(MineSweeper, m)
     py::class_<slvr::ActionArray>(m, "ActionArray")
         .def(py::init<>())
         .def("size", &slvr::ActionArray::size)
+        .def("push", [](slvr::ActionArray& actionArray, int i) 
+        {
+            actionArray.push(static_cast<mswp::BoardIndex>(i));
+        })
         .def("reset", &slvr::ActionArray::reset);
 
     m.def("use_action_arrays", slvr::useActionArrays);

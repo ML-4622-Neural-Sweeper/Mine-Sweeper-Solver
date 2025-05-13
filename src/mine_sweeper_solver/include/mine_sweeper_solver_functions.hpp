@@ -6,7 +6,7 @@
 namespace slvr
 {
 
-typedef std::array<mswp::BoardIndex, SLVR_ACTION_BUFFER_SIZE> ActionBuffer;
+typedef std::array<mswp::BoardIndex, MSWP_MAX_TILES> ActionBuffer;
 typedef uint8_t ActionsSize;
 
 class ActionArray

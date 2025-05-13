@@ -282,6 +282,7 @@ void getRecommendedActions(MineSweeperSolver& outSolver, ActionArray& outClicks,
     {
         throw std::runtime_error("Invalid lowestProb!");
     }
+    outClicks.push(lowestProb);
 }
 
 float getReward(
@@ -303,11 +304,14 @@ float getReward(
         return rewardForClickingFlag;
     }
 
+    // LOG_INFO("Click");
     outBoard.click(i);
+    // LOG_INFO("Update");
     outSolver.update(outBoard.tileString());
     
     while (true)
     {
+        // LOG_INFO("intersectionSolver");
         intersectionSolver(outSolver, clicks, flags);
     
         if (outBoard.gameState() == mswp::MineSweeper::WON)
@@ -326,7 +330,9 @@ float getReward(
         }
 
         mswp::BoardSize tiles_pre_click = outBoard.remainingTile();
+        // LOG_INFO("useActionArrays");
         useActionArrays(clicks, flags, outBoard);
+        // LOG_INFO("outSolver.update");
         outSolver.update(outBoard.tileString());
         totalTilesClicked += tiles_pre_click - outBoard.remainingTile();
     }
