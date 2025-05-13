@@ -1,22 +1,8 @@
-# Terminal Sweeper
+# Neural Sweeper
 
-Terminal Sweeper is a program that runs Mine Sweeper in your terminal. Terminal Sweeper is also capable of solving Mine Sweeper Games for you. The goal of this repository is to create an accurate and highly optimized Mine Sweeper Solver. 
+## How To Compile Binding
 
-<p align="center">
-  <img src="docs/imgs/normal_mode.png" alt="Game of Mine Sweeper on Terminal"/>
-  <img src="docs/imgs/assist_mode.png" alt="Assist Mode"/>
-</p>
-
-## Controls
-
-- Arrow keys or WASD to move cursor around
-- Enter or E to click a tile or click a menu
-- Delete or Q to flag a tile
-- F to enter/exit assist mode
-
-## How To Compile
-
-NOTE: Compilation requires that you have [CMake](https://cmake.org/download/) and a [C++ Compiler](https://isocpp.org/get-started) installed.
+NOTE: Compilation requires that you have [CMake](https://cmake.org/download/), a [C++ Compiler](https://isocpp.org/get-started) and a version of [Python](https://www.python.org/downloads/) greater than or equal to 3.8 installed. 
 
 ```bash
     cd /path/to/project/
@@ -25,29 +11,27 @@ NOTE: Compilation requires that you have [CMake](https://cmake.org/download/) an
     make
 ```
 
-## How To Run
+## How to Train Model
+
+First modify the hyperparameters before training, the hyper parameters are found in ```Neural-Sweeper/neural_sweeper/src/hyperparameters.py```.
+
 ```bash
-    # Linux / Mac OS
-    ./bin/MineSweeperSolver
+    cd /path/to/project/
+    cd neural_sweeper
+    python3 train.py
 ```
-### How To Run Tests
+
+NOTE: If you receive an error when running ```python3 train.py``` make sure you used the same version of python that cmake during compiling of the bindings! CMake will print out the version that its uses when it compiles.
+
+## How to Test Model
+
 ```bash
-    # Linux / Mac OS
-    ./bin/test/<ModuleName>
-```
-### How to Run Benchmarks
-```bash
-    # Linux / Mac OS
-    ./bin/benchmark/<ModuleName>
+    cd /path/to/project/
+    cd neural_sweeper
+    python3 test.py
 ```
 
 ## Packages Used
 - [Google Benchmark](https://github.com/google/benchmark)
 - [Google Test](https://github.com/google/googletest)
 - [Cpp-Terminal](https://github.com/jupyter-xeus/cpp-terminal)
-
-## Todo
-- Use the expected value of how many tiles will be gained per click to determine next click.
-- Create batchscript to add Terminal Sweeper to paths for easy launch.
-- Add option to switch from keyboard control to mouse control.
-- Multi Thread Solution Finder
